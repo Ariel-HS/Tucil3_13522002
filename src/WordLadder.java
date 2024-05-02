@@ -40,17 +40,17 @@ class WordLadder {
             System.out.print("Masukkan pilihan algoritma: "); 
             pilihanAlgoritma = inputScanner.nextLine();
 
-            if (pilihanAlgoritma.equals("1")) {
-                pilihanAlgoritma = "UCS";
+            if (pilihanAlgoritma.equals("UCS")) {
+                pilihanAlgoritma = "1";
             } 
-            else if (pilihanAlgoritma.equals("2")) {
-                pilihanAlgoritma = "Greedy Best First Search";
+            else if (pilihanAlgoritma.equals("Greedy Best First Search")) {
+                pilihanAlgoritma = "2";
             } 
-            else if (pilihanAlgoritma.equals("3")) {
-                pilihanAlgoritma = "A*";
+            else if (pilihanAlgoritma.equals("A*")) {
+                pilihanAlgoritma = "3";
             } 
             
-            if (pilihanAlgoritma.equals("UCS") || pilihanAlgoritma.equals("Greedy Best First Search") || pilihanAlgoritma.equals("A*")) 
+            if (pilihanAlgoritma.equals("1") || pilihanAlgoritma.equals("2") || pilihanAlgoritma.equals("3")) 
             {
                 isLoop = false;
             }
@@ -62,7 +62,13 @@ class WordLadder {
         System.out.println("Pilihan algoritma: " + pilihanAlgoritma);
 
         long startTime = System.currentTimeMillis();
-        Algorithm.UCS(startWord,endWord);
+        if (pilihanAlgoritma.equals("1")){
+            Algorithm.UCS(startWord, endWord);
+        } else if (pilihanAlgoritma.equals("2")) {
+            Algorithm.GBFS(startWord, endWord);
+        } else {
+            Algorithm.AStar(startWord, endWord);
+        }
         long endTime = System.currentTimeMillis();
 
         System.out.println("Time: " + (endTime-startTime) + "ms");
