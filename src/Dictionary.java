@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Dictionary {
+class Dictionary {
     private static HashMap<String, Boolean> wordList;
 
     static {
@@ -32,5 +32,16 @@ public class Dictionary {
         }
 
         return true;
+    }
+
+    public static ArrayList<String> getNeighbour(String word) {
+        ArrayList<String> neighbours = new ArrayList<String>();
+        for (String el : wordList.keySet()) {
+            if (Util.charDifference(word, el) == 1) {
+                neighbours.add(el);
+            }
+        }
+
+        return neighbours;
     }
 }

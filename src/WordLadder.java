@@ -61,6 +61,12 @@ class WordLadder {
 
         System.out.println("Pilihan algoritma: " + pilihanAlgoritma);
 
+        long startTime = System.currentTimeMillis();
+        Algorithm.UCS(startWord,endWord);
+        long endTime = System.currentTimeMillis();
+
+        System.out.println("Time: " + (endTime-startTime) + "ms");
+
         inputScanner.close();
     }
 }
