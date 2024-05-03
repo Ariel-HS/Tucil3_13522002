@@ -16,7 +16,7 @@ class Dictionary {
                 wordList.put(word,true);
                 // System.out.println(word);
             }
-            System.out.println("Finished!");
+            System.out.println("Finished importing");
 
             readScanner.close();
         } catch (FileNotFoundException e) {

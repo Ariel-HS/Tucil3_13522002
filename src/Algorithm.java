@@ -1,36 +1,48 @@
 import java.util.*;
 
 class Algorithm {
-    public static void UCS(String startWord, String endWord) {
-        PriorityQueue<Pair<String,Integer>> pQueue = new PriorityQueue<Pair<String,Integer>>(Pair::compareTo);
-        HashMap<String, ArrayList<String>> parentList = new HashMap<>();
+    public static Pair<ArrayList<String>, Integer> UCS(String startWord, String endWord) throws NoSolutionException {
+        PriorityQueue<Pair<ArrayList<String>,Integer>> pQueue = new PriorityQueue<>(Pair::compareTo);
         HashMap<String, Boolean> checked = new HashMap<>();
         Boolean found = false;
 
-        pQueue.add(new Pair<String,Integer>(startWord, 0));
+        ArrayList<String> startPath = new ArrayList<>();
+        startPath.add(startWord);
+
+        ArrayList<String> finalPath = new ArrayList<>();
+        pQueue.add(new Pair<ArrayList<String>,Integer>(startPath, 0));
         while (!found && !pQueue.isEmpty()) {
-            Pair<String,Integer> currentNode = pQueue.poll();
-            String currentWord = currentNode.getKey();
+            Pair<ArrayList<String>,Integer> currentNode = pQueue.poll();
+            String currentWord = currentNode.getKey().get(currentNode.getKey().size()-1);
             Integer currentCost = currentNode.getValue();
+            checked.put(currentWord, true);
+
+            // System.out.print("Current path: ");
+            // for (String e : currentNode.getKey()) {
+            //     System.out.print(e + " ");
+            // }
+            // System.out.println("--- currentWord: " + currentWord);
             
             if (currentWord.equals(endWord)) {
                 found = true;
+                finalPath = currentNode.getKey();
                 // System.out.println("Found!");
                 break;
             }
 
-            checked.put(currentWord, true);
-
             ArrayList<String> neighbours = Dictionary.getNeighbour(currentWord);
             for (String el : neighbours) {
                 if (checked.get(el) == null) {
-                    pQueue.add(new Pair<String,Integer>(el,currentCost+1));
+                    ArrayList<String> newPath = new ArrayList<>(currentNode.getKey());
+                    newPath.add(el);
 
-                    if (parentList.get(el) == null) {
-                        parentList.put(el, new ArrayList<>());
-                    }
-    
-                    parentList.get(el).add(currentWord);
+                    // System.out.print("New path: ");
+                    // for (String e : newPath) {
+                    //     System.out.print(e + " ");
+                    // }
+                    // System.out.println();
+
+                    pQueue.add(new Pair<ArrayList<String>,Integer>(newPath, currentCost+1));
                 }
             }
 
@@ -43,37 +55,31 @@ class Algorithm {
         }
 
         if (!found) {
-            System.out.println("Tidak ada solusi yang ditemukan!");
-
-            return;
+            throw new NoSolutionException("Tidak ada solusi yang ditemukan", checked.size());
         }
 
-        ArrayList<String> path = findPath(startWord, endWord, parentList);
-
-        System.out.print("Path: ");
-
-        for (int i=0;i<path.size();i++) {
-            System.out.print(path.get(i));
-            if (i != path.size()-1) {
-                System.out.print(" -> ");
-            }
-        }
-        System.out.print("\n");
+        return new Pair<ArrayList<String>, Integer>(finalPath, checked.size());
     }
 
-    public static void GBFS(String startWord, String endWord) {
-        PriorityQueue<Pair<String,Integer>> pQueue = new PriorityQueue<Pair<String,Integer>>(Pair::compareTo);
-        HashMap<String, ArrayList<String>> parentList = new HashMap<>();
+    public static Pair<ArrayList<String>, Integer> GBFS(String startWord, String endWord) throws NoSolutionException {
+        PriorityQueue<Pair<ArrayList<String>,Integer>> pQueue = new PriorityQueue<>(Pair::compareTo);
         // HashMap<String, Boolean> checked = new HashMap<>();
         Boolean found = false;
+        Integer numChecked = 0;
 
-        pQueue.add(new Pair<String,Integer>(startWord, Util.charDifference(startWord, endWord)));
+        ArrayList<String> startPath = new ArrayList<>();
+        startPath.add(startWord);
+
+        ArrayList<String> finalPath = new ArrayList<>();
+        pQueue.add(new Pair<ArrayList<String>,Integer>(startPath, Util.charDifference(startWord, endWord)));
         while (!found && !pQueue.isEmpty()) {
-            Pair<String,Integer> currentNode = pQueue.poll();
-            String currentWord = currentNode.getKey();
+            Pair<ArrayList<String>,Integer> currentNode = pQueue.poll();
+            String currentWord = currentNode.getKey().get(currentNode.getKey().size()-1);
+            numChecked++;
             
             if (currentWord.equals(endWord)) {
                 found = true;
+                finalPath = currentNode.getKey();
                 // System.out.println("Found!");
                 break;
             }
@@ -83,13 +89,10 @@ class Algorithm {
             ArrayList<String> neighbours = Dictionary.getNeighbour(currentWord);
             for (String el : neighbours) {
                 // if (checked.get(el) == null) {
-                pQueue.add(new Pair<String,Integer>(el,Util.charDifference(currentWord, endWord)));
+                ArrayList<String> newPath = new ArrayList<>(currentNode.getKey());
+                newPath.add(el);
 
-                if (parentList.get(el) == null) {
-                    parentList.put(el, new ArrayList<>());
-                }
-
-                parentList.get(el).add(currentWord);
+                pQueue.add(new Pair<ArrayList<String>,Integer>(newPath, Util.charDifference(currentWord, endWord)));
                 // }
             }
 
@@ -102,54 +105,42 @@ class Algorithm {
         }
 
         if (!found) {
-            System.out.println("Tidak ada solusi yang ditemukan!");
-
-            return;
+            throw new NoSolutionException("Tidak ada solusi yang ditemukan", numChecked);
         }
 
-        ArrayList<String> path = findPath(startWord, endWord, parentList);
-
-        System.out.print("Path: ");
-
-        for (int i=0;i<path.size();i++) {
-            System.out.print(path.get(i));
-            if (i != path.size()-1) {
-                System.out.print(" -> ");
-            }
-        }
-        System.out.print("\n");
+        return new Pair<ArrayList<String>, Integer>(finalPath, numChecked);
     }
 
-    public static void AStar(String startWord, String endWord) {
-        PriorityQueue<Pair<String,Integer>> pQueue = new PriorityQueue<Pair<String,Integer>>(Pair::compareTo);
-        HashMap<String, ArrayList<String>> parentList = new HashMap<>();
+    public static Pair<ArrayList<String>, Integer> AStar(String startWord, String endWord) throws NoSolutionException {
+        PriorityQueue<Pair<ArrayList<String>,Integer>> pQueue = new PriorityQueue<>(Pair::compareTo);
         HashMap<String, Boolean> checked = new HashMap<>();
         Boolean found = false;
 
-        pQueue.add(new Pair<String,Integer>(startWord, 0+Util.charDifference(startWord, endWord)));
+        ArrayList<String> startPath = new ArrayList<>();
+        startPath.add(startWord);
+
+        ArrayList<String> finalPath = new ArrayList<>();
+        pQueue.add(new Pair<ArrayList<String>,Integer>(startPath, 0+Util.charDifference(startWord, endWord)));
         while (!found && !pQueue.isEmpty()) {
-            Pair<String,Integer> currentNode = pQueue.poll();
-            String currentWord = currentNode.getKey();
+            Pair<ArrayList<String>,Integer> currentNode = pQueue.poll();
+            String currentWord = currentNode.getKey().get(currentNode.getKey().size()-1);
             Integer currentCost = currentNode.getValue();
+            checked.put(currentWord, true);
             
             if (currentWord.equals(endWord)) {
                 found = true;
+                finalPath = currentNode.getKey();
                 // System.out.println("Found!");
                 break;
             }
 
-            checked.put(currentWord, true);
-
             ArrayList<String> neighbours = Dictionary.getNeighbour(currentWord);
             for (String el : neighbours) {
                 if (checked.get(el) == null) {
-                    pQueue.add(new Pair<String,Integer>(el,currentCost+1+Util.charDifference(currentWord, endWord)));
+                    ArrayList<String> newPath = new ArrayList<>(currentNode.getKey());
+                    newPath.add(el);
 
-                    if (parentList.get(el) == null) {
-                        parentList.put(el, new ArrayList<>());
-                    }
-    
-                    parentList.get(el).add(currentWord);
+                    pQueue.add(new Pair<ArrayList<String>,Integer>(newPath,currentCost+1+Util.charDifference(currentWord, endWord)));
                 }
             }
 
@@ -162,39 +153,21 @@ class Algorithm {
         }
 
         if (!found) {
-            System.out.println("Tidak ada solusi yang ditemukan!");
-
-            return;
+            throw new NoSolutionException("Tidak ada solusi yang ditemukan", checked.size());
         }
 
-        ArrayList<String> path = findPath(startWord, endWord, parentList);
+        return new Pair<ArrayList<String>, Integer>(finalPath, checked.size());
+    }
+}
 
-        System.out.print("Path: ");
+class NoSolutionException extends Exception {
+    private Integer numChecked;
 
-        for (int i=0;i<path.size();i++) {
-            System.out.print(path.get(i));
-            if (i != path.size()-1) {
-                System.out.print(" -> ");
-            }
-        }
-        System.out.print("\n");
+    public NoSolutionException(String s, Integer c) {
+        super(s);
     }
 
-    private static ArrayList<String> findPath(String startWord, String endWord, HashMap<String, ArrayList<String>> parentList) {
-        ArrayList<String> path = new ArrayList<>();
-        Boolean found = false;
-
-        String currentWord = endWord;
-        while (!found) {
-            path.add(0,currentWord);
-
-            if (currentWord.equals(startWord)) {
-                found = true;
-            } else {
-                currentWord = parentList.get(currentWord).get(0);
-            }
-        }
-
-        return path;
+    public Integer getChecked() {
+        return numChecked;
     }
 }
