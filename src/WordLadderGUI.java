@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 public class WordLadderGUI implements ActionListener{
     JFrame frame = new JFrame();
+    JLabel statusLabel = new JLabel();
 
     JButton ucsButton;
     JButton gbfsButton;
@@ -74,10 +75,9 @@ public class WordLadderGUI implements ActionListener{
 
         // End Word Panel Setup ==================================================================================================================
 
-        // Solve Panel Setup ==================================================================================================================
-        JPanel solvePanel = new JPanel();
-        // solvePanel.setBackground(Color.green);
-        solvePanel.setBounds(0, 200, 300, 80);
+        // Button Panel Setup ==================================================================================================================
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBounds(0, 200, 300, 30);
 
         ucsButton = new JButton();
         ucsButton.setSize(100,30);
@@ -97,28 +97,36 @@ public class WordLadderGUI implements ActionListener{
         astarButton.setAlignmentX(JButton.CENTER);
         astarButton.addActionListener(this);
 
-        solvePanel.add(ucsButton);
-        solvePanel.add(gbfsButton);
-        solvePanel.add(astarButton);
+        buttonPanel.add(ucsButton);
+        buttonPanel.add(gbfsButton);
+        buttonPanel.add(astarButton);
 
-        // Solution Panel Setup ==================================================================================================================
+        // Button Panel Setup ==================================================================================================================
+
+        // Status Label Setup ==================================================================================================================
+        statusLabel = new JLabel();
+        statusLabel.setText("...");
+        statusLabel.setFont(new Font("Bebas", Font.PLAIN,12));
+        statusLabel.setForeground(Color.black);
+        statusLabel.setBounds(0,230, 300,50);
+        statusLabel.setHorizontalAlignment(JLabel.CENTER);
+        // Status Label Setup ==================================================================================================================
 
         // Frame setup
         frame.setTitle("Word Ladder");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
-        frame.setSize(300,280);
+        frame.setSize(300,320);
         frame.setVisible(true);
 
         frame.add(startWordPanel);
         frame.add(endWordPanel);
-        frame.add(solvePanel);
+        frame.add(buttonPanel);
+        frame.add(statusLabel);
 
         ImageIcon image = new ImageIcon("logo.png"); // if not found, ignore
         frame.setIconImage(image.getImage());
-
-        // frame.getContentPane().setBackground(Color.DARK_GRAY);
     }
 
     @Override
@@ -129,18 +137,28 @@ public class WordLadderGUI implements ActionListener{
             String startWord = startWordEntry.getText().toUpperCase();
             String endWord = endWordEntry.getText().toUpperCase();
 
-            if (startWord.length() == endWord.length() && Dictionary.isInDictionary(startWord) && Dictionary.isInDictionary(endWord)) {
+            if (startWord.length() != endWord.length()) {
+                statusLabel.setText("Panjang kata tidak sama!");
+            }
+            else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
+                statusLabel.setText("Kata tidak ada di dalam Dictionary");
+            }
+            else {
+                statusLabel.setText("Calculating...");
+                statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
-
+                
+                long startTime = System.currentTimeMillis();
                 try {
                     solusi = Algorithm.UCS(startWord, endWord);
                 }
                 catch (NoSolutionException ex) {
                     System.out.println(ex.getMessage());
                 }
+                long endTime = System.currentTimeMillis();
                 
                 frame.dispose();
-                new SolutionFrame(solusi.getKey(), 1, solusi.getValue());
+                new SolutionFrame(solusi.getKey(), endTime-startTime, solusi.getValue());
             }
         }
         else if (e.getSource()==gbfsButton) {
@@ -149,18 +167,28 @@ public class WordLadderGUI implements ActionListener{
             String startWord = startWordEntry.getText().toUpperCase();
             String endWord = endWordEntry.getText().toUpperCase();
 
-            if (startWord.length() == endWord.length() && Dictionary.isInDictionary(startWord) && Dictionary.isInDictionary(endWord)) {
+            if (startWord.length() != endWord.length()) {
+                statusLabel.setText("Panjang kata tidak sama!");
+            }
+            else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
+                statusLabel.setText("Kata tidak ada di dalam Dictionary");
+            }
+            else {
+                statusLabel.setText("Calculating...");
+                statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
 
+                long startTime = System.currentTimeMillis();
                 try {
                     solusi = Algorithm.GBFS(startWord, endWord);
                 }
                 catch (NoSolutionException ex) {
                     System.out.println(ex.getMessage());
                 }
+                long endTime = System.currentTimeMillis();
 
                 frame.dispose();
-                new SolutionFrame(solusi.getKey(), 1, solusi.getValue());
+                new SolutionFrame(solusi.getKey(), endTime-startTime, solusi.getValue());
             }
         }
         else if (e.getSource()==astarButton) {
@@ -169,18 +197,28 @@ public class WordLadderGUI implements ActionListener{
             String startWord = startWordEntry.getText().toUpperCase();
             String endWord = endWordEntry.getText().toUpperCase();
 
-            if (startWord.length() == endWord.length() && Dictionary.isInDictionary(startWord) && Dictionary.isInDictionary(endWord)) {
+            if (startWord.length() != endWord.length()) {
+                statusLabel.setText("Panjang kata tidak sama!");
+            }
+            else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
+                statusLabel.setText("Kata tidak ada di dalam Dictionary");
+            }
+            else {
+                statusLabel.setText("Calculating...");
+                statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
 
+                long startTime = System.currentTimeMillis();
                 try {
                     solusi = Algorithm.AStar(startWord, endWord);
                 }
                 catch (NoSolutionException ex) {
                     System.out.println(ex.getMessage());
                 }
+                long endTime = System.currentTimeMillis();
 
                 frame.dispose();
-                new SolutionFrame(solusi.getKey(), 1, solusi.getValue());
+                new SolutionFrame(solusi.getKey(), endTime-startTime, solusi.getValue());
             }
         }
     }
@@ -190,7 +228,7 @@ class SolutionFrame {
     private JFrame frame = new JFrame();
     Border border = BorderFactory.createLineBorder(Color.black,2);
 
-    public SolutionFrame(ArrayList<String> path, Integer time, Integer numChecked) {
+    public SolutionFrame(ArrayList<String> path, Number time, Integer numChecked) {
         // Info Panel Setup ==================================================================================================================
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(null);
@@ -283,5 +321,8 @@ class SolutionFrame {
 
         frame.add(infoPanel);
         frame.add(stepsPanel);
+
+        ImageIcon image = new ImageIcon("logo.png"); // if not found, ignore
+        frame.setIconImage(image.getImage());
     }
 }
