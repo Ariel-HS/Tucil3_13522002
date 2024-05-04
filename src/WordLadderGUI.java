@@ -26,6 +26,10 @@ public class WordLadderGUI implements ActionListener{
     JTextField startWordEntry;
     JTextField endWordEntry;
 
+    public static void main(String[] args) {
+        new WordLadderGUI();
+    }
+
     WordLadderGUI() {
         // Start Word Panel Setup ================================================================================================================
         JPanel startWordPanel = new JPanel();
@@ -125,7 +129,7 @@ public class WordLadderGUI implements ActionListener{
         frame.add(buttonPanel);
         frame.add(statusLabel);
 
-        ImageIcon image = new ImageIcon("logo.png"); // if not found, ignore
+        ImageIcon image = new ImageIcon("./src/logo.png"); // if not found, ignore
         frame.setIconImage(image.getImage());
     }
 
@@ -322,7 +326,7 @@ class SolutionFrame {
         frame.add(infoPanel);
         frame.add(stepsPanel);
 
-        ImageIcon image = new ImageIcon("logo.png"); // if not found, ignore
+        ImageIcon image = new ImageIcon("./src/logo.png"); // if not found, ignore
         frame.setIconImage(image.getImage());
     }
 }

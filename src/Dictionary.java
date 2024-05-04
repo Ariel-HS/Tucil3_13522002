@@ -8,7 +8,7 @@ class Dictionary {
         wordList = new HashMap<String, Boolean>();
 
         try {
-            File wordFile = new File("wordList.txt");
+            File wordFile = new File("./test/wordList.txt");
             Scanner readScanner = new Scanner(wordFile);
             System.out.println("Importing dictionary...");
             while (readScanner.hasNextLine()) {
@@ -20,7 +20,9 @@ class Dictionary {
 
             readScanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File tidak ditemukan! Tolong tempatkan wordList pada /src");
+            System.out.println("File tidak ditemukan! Tolong tempatkan wordList pada /test");
+
+            System.exit(0);
         }
         
         // System.out.println(wordList);
