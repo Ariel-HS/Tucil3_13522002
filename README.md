@@ -13,7 +13,7 @@
 Word Ladder adalah suatu sebuah permainan kata yang ditemukan oleh Lewis Carroll pada tahun 1877. Pemain diberikan dua kata dengan panjang sama, start word dan end word, dan pemain harus menemukan rantai kata yang menghubungkan antara start word dan end word. Penghubungan start word dan end word dilakukan dengan mengubah 1 karakter dalam kata secara tahap per tahap sampai kata sama dengan end word. Permainan ini dapat diselesaikan menggunakan konsep Route Planning. Route Planning adalah salah satu permasalahan programming di mana algoritma harus dapat mencari rute dari simpul awal menuju simpul akhir. Dalam permainan Word Ladder, simpul awal adalah start word, simpul akhir adalah end word, dan tetangga dari setiap simpul adalah kata yang berbeda 1 huruf dengan simpul tersebut. Algoritma Route Planning yang digunakan ada 3, yaitu Uniform Cost Search, Greedy Best First Search, dan A* Algorithm. Pada proyek ini, diperlihatkan perbedaan ketiga algoritma tersebut dalam menyelesaikan permainan Word Ladder.
 
 ## Dependencies
-- Java - JDK 8 or above
+- Java - JDK 11 or above
 - Java Swing
 
 ## Features
