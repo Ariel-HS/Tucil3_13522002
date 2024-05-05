@@ -4,6 +4,7 @@ import java.io.*;
 class Dictionary {
     private static HashMap<String, Boolean> wordList;
 
+    // on startup import wordList
     static {
         wordList = new HashMap<String, Boolean>();
 
@@ -24,10 +25,9 @@ class Dictionary {
 
             System.exit(0);
         }
-        
-        // System.out.println(wordList);
     }
 
+    // Function to check if word is in wordList
     public static Boolean isInDictionary(String word) {
         if (wordList.get(word) == null) {
             return false;
@@ -36,6 +36,7 @@ class Dictionary {
         return true;
     }
 
+    // Function to check neighbour of word
     public static ArrayList<String> getNeighbour(String word) {
         ArrayList<String> neighbours = new ArrayList<String>();
         for (String el : wordList.keySet()) {
@@ -47,6 +48,7 @@ class Dictionary {
         return neighbours;
     }
 
+    // Function to get character difference between two words
     static Integer charDifference(String word1, String word2) {
         if (word1.length() != word2.length()) { // if different length
             return -1;

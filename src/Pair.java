@@ -15,6 +15,7 @@ class Pair<X,Y extends Number> implements Comparable<Pair<X,Y>>  {
         return this.value;
     }
 
+    // Override method for Comparable
     public int compareTo(Pair<X,Y> p) {
         if (this.getValue().doubleValue() < p.getValue().doubleValue()) {
             return -1;

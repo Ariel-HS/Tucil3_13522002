@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class WordLadderGUI implements ActionListener{
+public class WordLadderGUI implements ActionListener{ // Main Menu
     JFrame frame = new JFrame();
     JLabel statusLabel = new JLabel();
 
@@ -34,7 +34,6 @@ public class WordLadderGUI implements ActionListener{
         // Start Word Panel Setup ================================================================================================================
         JPanel startWordPanel = new JPanel();
         startWordPanel.setLayout(null);
-        // startWordPanel.setBackground(Color.red);
         startWordPanel.setBounds(0, 0, 300, 100);
 
         JLabel startWordLabel = new JLabel();
@@ -45,6 +44,7 @@ public class WordLadderGUI implements ActionListener{
         startWordLabel.setHorizontalTextPosition(JLabel.CENTER);
         startWordLabel.setHorizontalAlignment(JLabel.CENTER);
 
+        // Start Word Input
         startWordEntry = new JTextField();
         startWordEntry.setBounds(50,50,200,40);
         startWordEntry.setHorizontalAlignment(JTextField.CENTER);
@@ -52,13 +52,11 @@ public class WordLadderGUI implements ActionListener{
 
         startWordPanel.add(startWordLabel);
         startWordPanel.add(startWordEntry);
-
         // Start Word Panel Setup ================================================================================================================
 
         // End Word Panel Setup ==================================================================================================================
         JPanel endWordPanel = new JPanel();
         endWordPanel.setLayout(null);
-        // endWordPanel.setBackground(Color.blue);
         endWordPanel.setBounds(0, 100, 300, 100);        
 
         JLabel endWordLabel = new JLabel();
@@ -69,6 +67,7 @@ public class WordLadderGUI implements ActionListener{
         endWordLabel.setHorizontalTextPosition(JLabel.CENTER);
         endWordLabel.setHorizontalAlignment(JLabel.CENTER);
 
+        // End Word Input
         endWordEntry = new JTextField();
         endWordEntry.setBounds(50,50,200,40);
         endWordEntry.setHorizontalAlignment(JTextField.CENTER);
@@ -76,7 +75,6 @@ public class WordLadderGUI implements ActionListener{
 
         endWordPanel.add(endWordLabel);
         endWordPanel.add(endWordEntry);
-
         // End Word Panel Setup ==================================================================================================================
 
         // Button Panel Setup ==================================================================================================================
@@ -104,10 +102,10 @@ public class WordLadderGUI implements ActionListener{
         buttonPanel.add(ucsButton);
         buttonPanel.add(gbfsButton);
         buttonPanel.add(astarButton);
-
         // Button Panel Setup ==================================================================================================================
 
         // Status Label Setup ==================================================================================================================
+        // Text to show status (Panjang berbeda/Tidak ada di dalam kamus/Algorithm dimulai)
         statusLabel = new JLabel();
         statusLabel.setText("...");
         statusLabel.setFont(new Font("Bebas", Font.PLAIN,12));
@@ -147,7 +145,7 @@ public class WordLadderGUI implements ActionListener{
             else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
                 statusLabel.setText("Kata tidak ada di dalam Dictionary");
             }
-            else {
+            else { // if fine
                 statusLabel.setText("Calculating...");
                 statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
@@ -177,7 +175,7 @@ public class WordLadderGUI implements ActionListener{
             else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
                 statusLabel.setText("Kata tidak ada di dalam Dictionary");
             }
-            else {
+            else { // if fine
                 statusLabel.setText("Calculating...");
                 statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
@@ -207,7 +205,7 @@ public class WordLadderGUI implements ActionListener{
             else if (!Dictionary.isInDictionary(startWord) || !Dictionary.isInDictionary(endWord)) {
                 statusLabel.setText("Kata tidak ada di dalam Dictionary");
             }
-            else {
+            else { // if fine
                 statusLabel.setText("Calculating...");
                 statusLabel.paintImmediately(statusLabel.getVisibleRect());
                 Pair<ArrayList<String>, Integer> solusi = new Pair<>(new ArrayList<>(), 0);
@@ -228,7 +226,7 @@ public class WordLadderGUI implements ActionListener{
     }
 }
 
-class SolutionFrame {
+class SolutionFrame { // Solution Menu
     private JFrame frame = new JFrame();
     Border border = BorderFactory.createLineBorder(Color.black,2);
 
@@ -288,7 +286,7 @@ class SolutionFrame {
                 for (int j=0; j<strLength; j++) { // create box for each char
                     JLabel currentStepLabel = new JLabel();
                     currentStepLabel.setText(""+currentStep.charAt(j));
-                    currentStepLabel.setFont(new Font("Bebas", Font.PLAIN, 15));
+                    currentStepLabel.setFont(new Font("Bebas", Font.PLAIN, 12));
                     currentStepLabel.setForeground(Color.black);
                     currentStepLabel.setVerticalAlignment(JLabel.CENTER);
                     currentStepLabel.setHorizontalAlignment(JLabel.CENTER);
