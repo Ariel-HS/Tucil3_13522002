@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.border.Border;
@@ -316,7 +318,7 @@ class SolutionFrame { // Solution Menu
         
         // Steps Panel Setup ==================================================================================================================
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setLayout(null);
         frame.setSize(360, 180+(30*path.size()));
         frame.setVisible(true);
@@ -326,5 +328,14 @@ class SolutionFrame { // Solution Menu
 
         ImageIcon image = new ImageIcon("./src/logo.png"); // if not found, ignore
         frame.setIconImage(image.getImage());
+
+        // Setup so goes back to main menu after closing
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                frame.dispose();
+                new WordLadderGUI();
+            }
+        });
     }
 }
